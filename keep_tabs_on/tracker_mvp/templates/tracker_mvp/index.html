@@ -9,10 +9,171 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{% static 'tracker_mvp/stylesheet.css' %}">
+
+<script>
+  window.console = window.console || function(t) {};
+</script>
+
+<script>
+  if (document.location.search.match(/type=embed/gi)) {
+    window.parent.postMessage("resize", "*");
+  }
+</script>
 
 </head>
 <body>
-<h1>Hello From KeepTabsOn</h1>
+
+<div class="page-wrapper">
+  <div class="nav-wrapper">
+  <!-- <div class="grad-bar"></div> -->
+  
+  <nav class="navbar">
+    <p><span style="color: #5e15eb; font-family: 'Poppins', sans-serif;">Keep</span>TabsOn</p>
+    <div class="menu-toggle" id="mobile-menu">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </div>
+    <ul class="nav no-search">
+      <li class="nav-item"><a href="#">Currency</a></li>
+      <li class="nav-item"><a href="#">Add Items</a></li>
+      <li class="nav-item"><a href="#">Settings</a></li>
+      <li class="nav-item"><a href="#">Report a Bug</a></li>
+      <li class="nav-item"><a href="#">About KeepTabsOn</a></li>
+    </ul>
+  </nav>
+  </div>
+</div>
+
+<div class="l-wrapper">
+  <div class="l-contents">
+    <h1 class="active_tracking_title">Active Tracking Products</h1>
+    <table>
+      <thead>
+        <th>Products</th>
+        <th>Ratings</th>
+        <th>Date Added</th>
+        <th>Current Price</th>
+        <th>Last Checked</th>
+        <th>Status</th>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Core i9 10K</td>
+          <td>🌟🌟🌟🌟</td>
+          <td>12 January 2021</td>
+          <td>23432</td>
+          <td>12 minutes Ago</td>
+          <td>Running</td>
+        </tr>
+        <tr>
+          <td>Core i7 12K</td>
+          <td>🌟🌟🌟🌟🌟</td>
+          <td>12 January 2021</td>
+          <td>3332</td>
+          <td>25 minutes Ago</td>
+          <td>Sleeping</td>
+        </tr>
+        <tr>
+          <td>Core i5 10K</td>
+          <td>🌟🌟🌟🌟🌟</td>
+          <td>12 January 2021</td>
+          <td>13432</td>
+          <td>1 minutes Ago</td>
+          <td>Running</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+<script type="text/javascript" src="{% static 'tracker_mvp/javascript.js'%}"></script>
+
+<script id="rendered-js" >
+  const tables = document.querySelectorAll('table');
+if (tables.length > 0) {
+  const breakPoint = 767;
+  tables.forEach(table => {
+    if (!table.classList.contains('is-no-scroll')) {
+      const inner = document.createElement('div');
+      inner.classList.add('table-inner');
+      const wrap = document.createElement('div');
+      wrap.classList.add('table-wrap');
+
+      table.parentNode.insertBefore(inner, table);
+      inner.appendChild(table);
+      inner.parentNode.insertBefore(wrap, inner);
+      wrap.appendChild(inner);
+
+      let scrollFlg = false;
+      table.baseWidth = table.style.width;
+
+      const tableScroll = () => {
+        if (scrollFlg) {
+          inner.removeAttribute('style');
+          wrap.removeAttribute('style');
+          table.style.width = table.baseWidth;
+          scrollFlg = false;
+        }
+        const winWidth = window.innerWidth;
+        if (winWidth > breakPoint) {
+          return;
+        }
+
+        let tableWidth = table.offsetWidth;
+        const wrapWidth = wrap.offsetWidth;
+
+        if (wrapWidth <= tableWidth) {
+          if (table.baseWidth !== '' && table.baseWidth !== '100%') {
+            tableWidth = parseFloat(table.baseWidth) + 1;
+
+          } else {
+            table.baseWidth = table.style.width;
+            table.style.width = 'auto';
+            inner.style.width = '9999px';
+            tableWidth = table.offsetWidth;
+            inner.style.width = '';
+            table.style.width = table.baseWidth;
+            console.log(tableWidth, table.baseWidth);
+          }
+        }
+
+        if (wrapWidth < tableWidth) {
+          wrap.removeAttribute('style');
+          wrap.style.overflowX = 'hidden';
+
+          const wrapLeftMargin = wrap.getBoundingClientRect().left;
+          const wrapRightMargin = winWidth - parseFloat(wrap.getBoundingClientRect().right);
+
+          wrap.style.overflowX = 'scroll';
+          wrap.style.marginLeft = '-' + wrapLeftMargin + 'px';
+          wrap.style.marginRight = '-' + wrapRightMargin + 'px';
+
+          inner.style.boxSizing = 'content-box';
+          inner.style.paddingLeft = wrapLeftMargin + 'px';
+          inner.style.paddingRight = wrapRightMargin + 'px';
+          inner.style.width = tableWidth + 1 + 'px'; //少数点分の繰り上げ
+
+          scrollFlg = true;
+        }
+      };
+
+      tableScroll();
+
+      let lastInnerWidth = window.innerWidth;
+      window.addEventListener('resize', function () {
+        if (lastInnerWidth !== window.innerWidth) {
+          tableScroll();
+          lastInnerWidth = window.innerWidth;
+        }
+      });
+    }
+  });
+}
+</script>
+
 </body>
 </html>
